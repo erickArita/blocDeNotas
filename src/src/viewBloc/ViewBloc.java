@@ -5,6 +5,9 @@
 package src.viewBloc;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -14,6 +17,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author erick
  */
 public class ViewBloc extends javax.swing.JFrame {
+
+    BlocAdmin manager = new BlocAdmin();
 
     /**
      * Creates new form ViewBloc
@@ -58,6 +63,11 @@ public class ViewBloc extends javax.swing.JFrame {
 
         jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuItem2.setText("Guardar");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem2);
 
         jMenuBar1.add(jMenu1);
@@ -71,21 +81,36 @@ public class ViewBloc extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 598, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
+        manager.openFile();
+        try {
+            String text = manager.readFile();
+            System.out.println(text);
+            jTextArea1.append(text);
+        } catch (IOException e) {
+            System.out.println(e.toString());
+        }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        String text = jTextArea1.getText();
+
+        try {
+            manager.writeFile(text, manager.getOpenedFilePath());
+        } catch (IOException ex) {
+            Logger.getLogger(ViewBloc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -122,25 +147,6 @@ public class ViewBloc extends javax.swing.JFrame {
         });
     }
 
-    public File ChooseFile() {
-        JFileChooser chooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("TXT");
-
-        chooser.setFileFilter(filter);
-
-        JPanel panel = new JPanel();
-
-        int returnVal = chooser.showDialog(panel, "Aceptar");
-
-        add(panel);
-
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            return chooser.getSelectedFile();
-        }
-
-        return null;
-
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;

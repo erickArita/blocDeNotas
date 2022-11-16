@@ -4,6 +4,8 @@
  */
 package src;
 
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import src.viewBloc.ViewBloc;
 
 /**
@@ -16,7 +18,14 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-       new ViewBloc().setVisible(true);
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            ex.printStackTrace();
+        }
+
+        new ViewBloc().setVisible(true);
     }
-    
+
 }
